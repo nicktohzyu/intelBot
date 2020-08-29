@@ -13,10 +13,9 @@ get a text-only message with the stations and their descriptions, as well as the
 
 ### /joinQueue
 get an inline keyboard to select the station they want to join
-
 success message says the number of persons ahead and expected waiting time
 
-### /leavequeue
+### /leaveQueue
 confirmation dialogue
 
 ### /waitTime
@@ -55,7 +54,7 @@ send a message to everyone in the queue
 ## master table
 each row represents a station
 
-columns: station name (pk), groupID (group with the stationmasters), time per person, tablename (for queue), queue length, current queue number, ping text (to be sent to front participant)
+columns: station name (pk), groupID (group with the stationmasters), time per person, tablename (for queue, or use stationname), queue length, current queue number, ping text (to be sent to front participant)
 
 ## table of participants
 stores the queue they are in
