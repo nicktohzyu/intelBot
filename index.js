@@ -1,7 +1,9 @@
 const TelegramBot = require('node-telegram-bot-api');
-// const queries = require('./db/queries');
 const {about, bot_name, debug, help, start, token} = require('./config');
 const messenger = require('./messenger');
+const queries = require('./db/queries');
+const stations = require('./handlers/stations');
+const joinQueue = require('./handlers/joinQueue');
 
 let bot;
 if (process.env.NODE_ENV === 'production') {
@@ -10,6 +12,8 @@ if (process.env.NODE_ENV === 'production') {
 } else {
     bot = new TelegramBot(token, {polling: true});
 }
+// const stationNames = queries.getStations();
+// const stationsText = "The stations available are: \n" + stationNames.join("\n") //TODO: deal with async
 
 messenger.initBot(bot);
 
@@ -47,6 +51,34 @@ bot.on('message', (msg) => {
         case '/start':
             messenger.send(msg.chat.id, start);
             break;
+        //for participants:
+        case '/stations':
+            stations.init(msg);
+            break;
+        case '/joinQueue':
+            joinQueue.init(msg);
+            break;
+        case '/leaveQueue':
+            break;
+        case '/waitTime':
+            break;
+        //for stationmasters:
+        case '/setMax':
+            break;
+        case '/queueLength':
+            break;
+        case '/getFront':
+            break;
+        case '/pingFront':
+            break;
+        case '/removeFront':
+            break;
+        case '/updateTimePerPerson':
+            break;
+        case '/getAll':
+            break;
+        case '/messageAll':
+            break;
         default:
             break;
     }
@@ -56,7 +88,7 @@ bot.on('message', (msg) => {
 //
 //     let data = JSON.parse(query.data);
 //     if (data.hasOwnProperty("cmd")) {
-//         query.chat = query.message.chat; //TODO: clean this hack
+//         query.chat = query.message.chat;
 //         switch (data.cmd) {
 //             case 'cancel':
 //                 cancelCallback(query);
@@ -77,3 +109,6 @@ bot.on('message', (msg) => {
 // }
 
 console.log("bot running");
+
+// let t = queries.getStations();
+// let x;
