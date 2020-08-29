@@ -25,21 +25,30 @@ get number of participants ahead of them in the queue, and expected waiting time
 ## for station masters:
 these commands can only be used in an authorized group chat (corresponding to a station)
 
+### /setMax
+set max number of people in queue
+
 ### /queueLength
 get number of persons ahead in the queue
 
 ### /getFront
-get telegram ID of person at the front (for stationmasters to message them directly)
+get telegram handle of person at the front (for stationmasters to message them directly)
 
 ### /pingFront
 send ping text to person at the front
 
 ### /removeFront
 remove person at front of queue
-update others in queue?
+message next x persons at the front of queue
 
 ### /updateTimePerPerson
 allows group admins to update the expected number of minutes each participant takes
+
+### /getAll
+get all the users queueing
+
+### /messageAll
+send a message to everyone in the queue
 
 
 # database:
@@ -56,4 +65,4 @@ columns: telegramID (pk), station name they are queing for
 ## table representing a station's queue
 each row represents a person
 
-columns: queue number (pk, unique), telegramID, stillQueueing (boolean, default true)
+columns: queue number (pk, unique), telegramID, hasleft (boolean, default false)
