@@ -1,4 +1,4 @@
-I suggest only allowing users to be in one queue at a time
+users only allowed to be in one queue at a time
 # commands:
 
 ### /help 
@@ -20,7 +20,7 @@ success message says the number of persons ahead and expected waiting time
 confirmation dialogue
 
 ### /waitTime
-get number of participants ahead of them in the queue, and expected waiting time
+get number of participants ahead of them in the queue, and expected waiting time (also mention which station they're queueing for)
 
 ## for station masters:
 these commands can only be used in an authorized group chat (corresponding to a station)
@@ -46,14 +46,14 @@ allows group admins to update the expected number of minutes each participant ta
 ## master table
 each row represents a station
 
-columns: station name (pk), groupID (with the stationmasters), time per person, tablename (for queue), queue length, current queue number, ping text (to be sent to front participant)
+columns: station name (pk), groupID (group with the stationmasters), time per person, tablename (for queue), queue length, current queue number, ping text (to be sent to front participant)
 
 ## table of participants
-stores the queue(s) they are in
+stores the queue they are in
 
-columns: telegramID (pk), station name(s)
+columns: telegramID (pk), station name they are queing for
 
 ## table representing a station's queue
 each row represents a person
 
-columns: queue number (pk, unique), telegramID, hasleft (boolean, default false)
+columns: queue number (pk, unique), telegramID, stillQueueing (boolean, default true)
