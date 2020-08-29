@@ -1,10 +1,21 @@
 const db = require('./db');
+const assert = require("assert");
 // const messenger = require('../messenger');
 // const sprintf = require("sprintf-js").sprintf;
 let bot;
 
 module.exports.initbot = function (b) {
     bot = b;
+}
+
+module.exports.getStations = async function () {
+    const statement = `
+		select name
+		from master.stations`;
+    const args = [];
+    const res = await db.query(statement, args);
+    const stationNames = res.rows.map(r => r.name); //somehow can't return this directly?
+    return stationNames;
 }
 
 module.exports.storeData = async function (key, data) {
@@ -63,5 +74,30 @@ module.exports.clearOldEntries = async function (schema_name, table_name) {
             delete from ${schema_name}.${table_name}
             where now() - time > interval '48 hours'`;
     const args = [];
+    await db.query(statement, args);
+}
+
+module.exports.getStation = async function (userId) {
+    //gets the station a user is queueing for
+    const statement = `
+            select station from master.participants
+            where id = $1`;
+    const args = [userId];
+    const res = await db.query(statement, args);
+    return (res.rowCount > 0) ? JSON.parse(res.rows[0].station) : null;
+}
+
+module.exports.enqueue = async function (userId, stationName) {
+
+}
+
+module.exports.leaveQueue = async function (userId) {
+    const station = getStation(userId);
+    //TODO: check null
+    const statement = `
+            update stations.$1
+            set hasLeft = TRUE
+            where userId = $2`;
+    const args = [station, userId];
     await db.query(statement, args);
 }
