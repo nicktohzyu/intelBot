@@ -7,7 +7,7 @@ module.exports.initBot = function (b) {
     bot = b;
 }
 
-const sendStartMeHelper = async function (startme_chat){
+const sendStartMeHelper = async function (startme_chat) {
     return await bot.sendMessage(
         startme_chat,
         'Hi there, please start a chat with me first!',//TODO: address user by first_name
@@ -21,8 +21,8 @@ const sendStartMe = async function (chat_id, startme_chat) {
     //no await, because if it does not work we do not send any more messages
     // send 'Start chat!' inline message
     try {
-        if(debug){
-            console.log("sending startme to " +startme_chat + " for " + chat_id);
+        if (debug) {
+            console.log("sending startme to " + startme_chat + " for " + chat_id);
         }
         const msgData = await queries.getData(startme_chat);
         if (msgData !== null) { // startme chat has been sent before, then delete previous
@@ -46,7 +46,7 @@ module.exports.send = async function (chat_id, text, reply_markup = {}, startme_
         }
         return await bot.sendMessage(chat_id, text, reply_markup);
     } catch (e) {
-        if(e.response.statusCode === 403){
+        if (e.response.statusCode === 403) {
             //blocked: ETELEGRAM: 403 Forbidden: bot was blocked by the user
             //not started: bot can't initiate conversation with a user
             sendStartMe(chat_id, startme_chat);
