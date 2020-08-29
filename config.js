@@ -22,4 +22,8 @@ module.exports.db_config = {
     idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
 };
 
+module.exports.help = "";
+module.exports.about = "";
+module.exports.start = "bot started";
+
 module.exports.superusers = [653601805] //array of user id
