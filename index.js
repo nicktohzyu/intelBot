@@ -41,7 +41,7 @@ bot.on('message', (msg) => {
     } else {
         command = msg.text;
     }
-    switch (command) {
+    switch (command.toLowerCase()) {
         case '/about':
             messenger.send(msg.chat.id, about);
             break;
@@ -55,58 +55,60 @@ bot.on('message', (msg) => {
         case '/stations':
             stations.init(msg);
             break;
-        case '/joinQueue':
+        case '/joinqueue':
             joinQueue.init(msg);
             break;
-        case '/leaveQueue':
+        case '/leavequeue':
             break;
-        case '/waitTime':
+        case '/waittime':
             break;
         //for stationmasters:
-        case '/setMax':
+        case '/setmax':
             break;
-        case '/queueLength':
+        case '/queuelength':
             break;
-        case '/getFront':
+        case '/getfront':
             break;
-        case '/pingFront':
+        case '/pingfront':
             break;
-        case '/removeFront':
+        case '/removefront':
             break;
-        case '/updateTimePerPerson':
+        case '/updatetimeperperson':
             break;
-        case '/getAll':
+        case '/getall':
             break;
-        case '/messageAll':
+        case '/messageall':
             break;
         default:
             break;
     }
 });
 
-// bot.on('callback_query', (query) => {
-//
-//     let data = JSON.parse(query.data);
-//     if (data.hasOwnProperty("cmd")) {
-//         query.chat = query.message.chat;
-//         switch (data.cmd) {
-//             case 'cancel':
-//                 cancelCallback(query);
-//                 break;
-//             default:
-//                 break;
-//         }
-//     }
-// })
-//
-// function cancelCallback(query) {
-//     messenger.edit(
-//         query.message.chat.id,
-//         query.message.message_id,
-//         null,
-//         'Your request has been cancelled!',
-//         null);
-// }
+bot.on('callback_query', (query) => {
+
+    let data = JSON.parse(query.data);
+    if (data.hasOwnProperty("c")) {
+        switch (data.c) {
+            case 'join':
+                joinQueue.callback(query);
+                break;
+            case 'cancel':
+                cancelCallback(query);
+                break;
+            default:
+                break;
+        }
+    }
+})
+
+function cancelCallback(query) {
+    messenger.edit(
+        query.message.chat.id,
+        query.message.message_id,
+        null,
+        'Your request has been cancelled!',
+        null);
+}
 
 console.log("bot running");
 
