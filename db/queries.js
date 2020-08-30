@@ -88,7 +88,13 @@ module.exports.getStation = async function (userId) {
 }
 
 module.exports.enqueue = async function (userId, stationName) {
-
+    const statement = `
+		insert into
+			stations.` + stationName + `	("userID")
+			values	($1);`;
+    const args = [userId];
+    await db.query(statement, args);
+    //TODO: add to master.participants
 }
 
 module.exports.leaveQueue = async function (userId) {

@@ -15,7 +15,7 @@ module.exports.init = async function (msg) {
         let data = {c: "join", s: stationNames[i]}
         ik.addRow({text: stationNames[i], callback_data: JSON.stringify(data)})
     }
-    ik.addRow({text: 'Cancel', callback_data: JSON.stringify({t: "cancel"})});
+    ik.addRow({text: 'Cancel', callback_data: JSON.stringify({c: "cancel"})});
     const text = 'Which station will you queue for?';
     messenger.send(msg.from.id, text, ik.build());
 }
@@ -23,8 +23,14 @@ module.exports.init = async function (msg) {
 module.exports.callback = async function (query) {
     try {
         const data = JSON.parse(query.data);
-        await queries.enqueue(query.from.id, data[s]);
-        // notifySuccess(query);
+        await queries.enqueue(query.from.id, data.s);
+        messenger.edit(
+            query.message.chat.id,
+            query.message.message_id,
+            null,
+            "Successfully added to queue",
+            null);
+        //TODO: notify success, call waittime?
     } catch (e) {
         console.log(e);
     }
