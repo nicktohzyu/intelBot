@@ -87,6 +87,24 @@ module.exports.getStation = async function (userId) {
     return (res.rowCount > 0) ? res.rows[0].station : null;
 }
 
+module.exports.getQueueLength = async function (stationName) {
+    //gets the station a user is queueing for
+    const statement = `SELECT count(*) AS length FROM stations.` + stationName + `;`;
+    const args = [];
+    const res = await db.query(statement, args);
+    return (res.rowCount > 0) ? res.rows[0].length : null;
+}
+
+module.exports.getTimeEach = async function (stationName) {
+    //gets the station a user is queueing for
+    const statement = `
+            select "timeEach" from master.stations
+            where name = $1;`;
+    const args = [stationName];
+    const res = await db.query(statement, args);
+    return (res.rowCount > 0) ? res.rows[0].timeEach : null;
+}
+
 module.exports.enqueue = async function (userId, stationName) {
     let res;
     try{
