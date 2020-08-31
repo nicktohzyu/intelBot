@@ -4,6 +4,7 @@ const messenger = require('./messenger');
 const queries = require('./db/queries');
 const stations = require('./handlers/stations');
 const joinQueue = require('./handlers/joinQueue');
+const waitTime = require('./handlers/waitTime');
 
 let bot;
 if (process.env.NODE_ENV === 'production') {
@@ -61,6 +62,7 @@ bot.on('message', (msg) => {
         case '/leavequeue':
             break;
         case '/waittime':
+            waitTime.init(msg);
             break;
         //for stationmasters:
         case '/setmax':
