@@ -81,29 +81,47 @@ module.exports.getStation = async function (userId) {
     //gets the station a user is queueing for
     const statement = `
             select station from master.participants
-            where id = $1`;
+            where "userID" = $1`;
     const args = [userId];
     const res = await db.query(statement, args);
-    return (res.rowCount > 0) ? JSON.parse(res.rows[0].station) : null;
+    return (res.rowCount > 0) ? res.rows[0].station : null;
 }
 
 module.exports.enqueue = async function (userId, stationName) {
-    const statement = `
-		insert into
-			stations.` + stationName + `	("userID")
-			values	($1);`;
-    const args = [userId];
-    await db.query(statement, args);
+    let res;
+    try{
+        const statement = `
+            insert into
+                stations.` + stationName + `	("userID")
+                values	($1)
+                RETURNING "queueNumber";`;
+        const args = [userId];
+        res = await db.query(statement, args);
+    } catch (e){
+        console.log("error inserting into station")
+        console.log(e);
+    }
+    try{
+        const statement = `
+            insert into
+                master.participants	("userID", "station", "queueNumber")
+                values	($1, $2, $3);`;
+        const args = [userId, stationName, res.rows[0].queueNumber];
+        await db.query(statement, args);
+    } catch (e){
+        console.log("error inserting into participants")
+        console.log(e);
+    }
     //TODO: add to master.participants
 }
 
 module.exports.leaveQueue = async function (userId) {
-    const station = getStation(userId);
-    //TODO: check null
-    const statement = `
+        const station = getStation(userId);
+        //TODO: check null
+        const statement = `
             update stations.$1
             set hasLeft = TRUE
             where userId = $2`;
-    const args = [station, userId];
-    await db.query(statement, args);
+        const args = [station, userId];
+        await db.query(statement, args);
 }
