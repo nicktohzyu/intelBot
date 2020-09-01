@@ -14,7 +14,7 @@ module.exports.init = async function (msg) {
         messenger.send(msg.from.id, text);
 
     } else {
-        const text = await queries.getWaitInfo(station);
+        const text = await queries.getWaitInfo(station, msg.from.id);
         messenger.send(msg.from.id, text);
     }
 }

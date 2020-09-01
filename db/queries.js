@@ -87,6 +87,16 @@ module.exports.getStation = async function (userId) {
     return (res.rowCount > 0) ? res.rows[0].station : null;
 }
 
+const getQueueNumber = async function (userId) {
+    //gets the station a user is queueing for
+    const statement = `
+            select "queueNumber" from master.participants
+            where "userID" = $1`;
+    const args = [userId];
+    const res = await db.query(statement, args);
+    return (res.rowCount > 0) ? res.rows[0].queueNumber : null;
+}
+
 module.exports.getQueueLength = async function (stationName) {
     //gets the station a user is queueing for
     const statement = `SELECT count(*) AS length FROM stations.` + stationName + `;`;
@@ -95,7 +105,21 @@ module.exports.getQueueLength = async function (stationName) {
     return (res.rowCount > 0) ? res.rows[0].length : null;
 }
 
-module.exports.getTimeEach = async function (stationName) {
+const getQueueLengthAhead = async function (stationName, userID) {
+    //gets the station a user is queueing for
+    const queueNumber = await getQueueNumber(userID);
+    if(queueNumber === null){
+        return null;
+    }
+    const statement =
+        `SELECT count(*) AS length FROM stations.` + stationName + `
+         WHERE "queueNumber" <= ($1);`;
+    const args = [queueNumber];
+    const res = await db.query(statement, args);
+    return (res.rowCount > 0) ? res.rows[0].length : null;
+}
+
+const getTimeEach = async function (stationName) {
     //gets the station a user is queueing for
     const statement = `
             select "timeEach" from master.stations
@@ -144,9 +168,9 @@ module.exports.leaveQueue = async function (userId) {
     await db.query(statement, args);
 }
 
-module.exports.getWaitInfo = async function (station) {
-    const timePer = await queries.getTimeEach(station);
-    const queueLength = await queries.getQueueLength(station);
+module.exports.getWaitInfo = async function (station, userID) {
+    const timePer = await getTimeEach(station);
+    const queueLength = await getQueueLengthAhead(station, userID);
     const text = "You're in the queue for: " + station +
         "\n\nThere are " + (queueLength - 1) + " participants ahead of you." +
         "\n\nThe expected waiting time is " + (queueLength - 1) * timePer + " minutes.";
