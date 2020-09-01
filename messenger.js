@@ -67,3 +67,7 @@ module.exports.edit = async function (chat_id, message_id, inline_message_id, te
         console.log(e);
     }
 }
+
+module.exports.getChat = async function (chatId){
+    return await bot.getChat(chatId); //issue with default parameters
+}

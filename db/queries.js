@@ -8,16 +8,6 @@ module.exports.initbot = function (b) {
     bot = b;
 }
 
-module.exports.getStations = async function () {
-    const statement = `
-		select name
-		from master.stations`;
-    const args = [];
-    const res = await db.query(statement, args);
-    const stationNames = res.rows.map(r => r.name); //somehow can't return this directly?
-    return stationNames;
-}
-
 module.exports.storeData = async function (key, data) {
     //because callback has 64 byte limit
     //keyed by messageID
@@ -75,6 +65,17 @@ module.exports.clearOldEntries = async function (schema_name, table_name) {
             where now() - time > interval '48 hours'`;
     const args = [];
     await db.query(statement, args);
+}
+
+module.exports.getStations = async function () {
+    const statement = `
+		select name
+		from master.stations
+		order by name`;
+    const args = [];
+    const res = await db.query(statement, args);
+    const stationNames = res.rows.map(r => r.name); //somehow can't return this directly?
+    return stationNames;
 }
 
 module.exports.getStation = async function (userId) {
@@ -203,4 +204,15 @@ module.exports.getAdminStation = async function (groupId) {
     const args = [groupId];
     const res = await db.query(statement, args);
     return (res.rowCount > 0) ? res.rows[0].name : null;
+}
+
+module.exports.getFrontUserId = async function (stationName) {
+    //returns userID of the front participant
+    const statement =
+        `SELECT "userID" FROM stations.` + stationName + `
+         ORDER BY "queueNumber" 
+         LIMIT 1;`;
+    const args = [];
+    const res = await db.query(statement, args);
+    return (res.rowCount > 0) ? res.rows[0].userID : null;
 }

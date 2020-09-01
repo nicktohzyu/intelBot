@@ -7,6 +7,7 @@ const joinQueue = require('./handlers/joinQueue');
 const waitTime = require('./handlers/waitTime');
 const leaveQueue = require('./handlers/leaveQueue');
 const queueLength = require('./handlers/queueLength');
+const getFront = require('./handlers/getFront');
 
 let bot;
 if (process.env.NODE_ENV === 'production') {
@@ -75,6 +76,7 @@ bot.on('message', (msg) => {
             queueLength.init(msg);
             break;
         case '/getfront':
+            getFront.init(msg);
             break;
         case '/pingfront':
             break;
