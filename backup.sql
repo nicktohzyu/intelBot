@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.3
--- Dumped by pg_dump version 12.3
+-- Dumped from database version 12.1
+-- Dumped by pg_dump version 12.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -52,8 +52,9 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE master.participants (
-    id bigint NOT NULL,
-    station text NOT NULL
+    "userID" bigint NOT NULL,
+    station text NOT NULL,
+    "queueNumber" integer NOT NULL
 );
 
 
@@ -67,9 +68,9 @@ CREATE TABLE master.stations (
     name text NOT NULL,
     "groupID" bigint NOT NULL,
     "timeEach" double precision NOT NULL,
-    "queueLength" integer DEFAULT 0 NOT NULL,
     "currentNumber" integer DEFAULT 0 NOT NULL,
-    "frontMessage" text NOT NULL
+    "frontMessage" text NOT NULL,
+    "maxQueueLength" integer DEFAULT 999 NOT NULL
 );
 
 
@@ -133,7 +134,9 @@ ALTER TABLE stations.station1 ALTER COLUMN "queueNumber" ADD GENERATED ALWAYS AS
 -- Data for Name: participants; Type: TABLE DATA; Schema: master; Owner: postgres
 --
 
-COPY master.participants (id, station) FROM stdin;
+COPY master.participants ("userID", station, "queueNumber") FROM stdin;
+1	station1	19
+653601805	station1	20
 \.
 
 
@@ -141,10 +144,10 @@ COPY master.participants (id, station) FROM stdin;
 -- Data for Name: stations; Type: TABLE DATA; Schema: master; Owner: postgres
 --
 
-COPY master.stations (name, "groupID", "timeEach", "queueLength", "currentNumber", "frontMessage") FROM stdin;
-station1	0	5	0	0	you're next
-station2	0	5	0	0	you're next
-station3	0	5	0	0	you're next
+COPY master.stations (name, "groupID", "timeEach", "currentNumber", "frontMessage", "maxQueueLength") FROM stdin;
+station2	0	5	0	you're next	999
+station3	0	5	0	you're next	999
+station1	-440049325	5	0	you're next	999
 \.
 
 
@@ -161,6 +164,8 @@ COPY miscellaneous.cache (data, key, "time") FROM stdin;
 --
 
 COPY stations.station1 ("userID", "queueNumber", "hasLeft") FROM stdin;
+1	19	f
+653601805	20	f
 \.
 
 
@@ -168,7 +173,7 @@ COPY stations.station1 ("userID", "queueNumber", "hasLeft") FROM stdin;
 -- Name: station1_queueNumber_seq; Type: SEQUENCE SET; Schema: stations; Owner: postgres
 --
 
-SELECT pg_catalog.setval('stations."station1_queueNumber_seq"', 1, false);
+SELECT pg_catalog.setval('stations."station1_queueNumber_seq"', 20, true);
 
 
 --
@@ -184,7 +189,7 @@ ALTER TABLE ONLY master.stations
 --
 
 ALTER TABLE ONLY master.participants
-    ADD CONSTRAINT participants_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT participants_pkey PRIMARY KEY ("userID");
 
 
 --
