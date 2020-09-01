@@ -194,3 +194,13 @@ module.exports.getWaitInfo = async function (station, userID) {
         "\n\nThe expected waiting time is " + (queueLength - 1) * timePer + " minutes.";
     return text;
 }
+
+module.exports.getAdminStation = async function (groupId) {
+    //gets the station an admin group controls
+    const statement = `
+            select name from master.stations
+            where "groupID" = $1`;
+    const args = [groupId];
+    const res = await db.query(statement, args);
+    return (res.rowCount > 0) ? res.rows[0].name : null;
+}

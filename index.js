@@ -6,6 +6,7 @@ const stations = require('./handlers/stations');
 const joinQueue = require('./handlers/joinQueue');
 const waitTime = require('./handlers/waitTime');
 const leaveQueue = require('./handlers/leaveQueue');
+const queueLength = require('./handlers/queueLength');
 
 let bot;
 if (process.env.NODE_ENV === 'production') {
@@ -71,6 +72,7 @@ bot.on('message', (msg) => {
         case '/setmax':
             break;
         case '/queuelength':
+            queueLength.init(msg);
             break;
         case '/getfront':
             break;
