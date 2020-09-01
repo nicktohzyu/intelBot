@@ -2,7 +2,7 @@ const queries = require('../db/queries');
 const {InlineKeyboard} = require('node-telegram-keyboard-wrapper');
 const messenger = require('../messenger');
 
-const alreadyQueuedMsg = "Error: you're already in a queue!";
+const alreadyQueuedMsg = "Error: you're already in a queue!\n\n";
 
 let bot;
 
@@ -14,7 +14,7 @@ module.exports.init = async function (msg) {
     try {
         const station = await queries.getStation(msg.from.id);
         if (station !== null) {
-            messenger.send(msg.from.id, alreadyQueuedMsg);
+            messenger.send(msg.from.id, alreadyQueuedMsg + await queries.getWaitInfo(station, msg.from.id));
             //TODO: send waitTime message
             return;
         }
@@ -36,7 +36,7 @@ module.exports.callback = async function (query) {
     try {
         const station = await queries.getStation(query.from.id);
         if (station !== null) {
-            messenger.send(query.from.id, alreadyQueuedMsg);
+            messenger.send(query.from.id, alreadyQueuedMsg + await queries.getWaitInfo(station, msg.from.id));
             messenger.edit(
                 query.message.chat.id,
                 query.message.message_id,
@@ -52,7 +52,7 @@ module.exports.callback = async function (query) {
             query.message.chat.id,
             query.message.message_id,
             null,
-            "Successfully added to queue",
+            "Successfully added to queue\n\n" + await queries.getWaitInfo(data.s, query.from.id),
             null);
         //TODO: notify success, call waittime?
     } catch (e) {
