@@ -14,11 +14,7 @@ module.exports.init = async function (msg) {
         messenger.send(msg.from.id, text);
 
     } else {
-        const timePer = await queries.getTimeEach(station);
-        const queueLength = await queries.getQueueLength(station);
-        const text = "You're in the queue for: " + station +
-            "\n\nThere are " + (queueLength - 1) + " participants ahead of you." +
-            "\n\nThe expected waiting time is " + (queueLength - 1) * timePer + " minutes.";
+        const text = await queries.getWaitInfo(station);
         messenger.send(msg.from.id, text);
     }
 }

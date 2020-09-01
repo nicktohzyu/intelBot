@@ -107,7 +107,7 @@ module.exports.getTimeEach = async function (stationName) {
 
 module.exports.enqueue = async function (userId, stationName) {
     let res;
-    try{
+    try {
         const statement = `
             insert into
                 stations.` + stationName + `	("userID")
@@ -115,18 +115,18 @@ module.exports.enqueue = async function (userId, stationName) {
                 RETURNING "queueNumber";`;
         const args = [userId];
         res = await db.query(statement, args);
-    } catch (e){
+    } catch (e) {
         console.log("error inserting into station")
         console.log(e);
     }
-    try{
+    try {
         const statement = `
             insert into
                 master.participants	("userID", "station", "queueNumber")
                 values	($1, $2, $3);`;
         const args = [userId, stationName, res.rows[0].queueNumber];
         await db.query(statement, args);
-    } catch (e){
+    } catch (e) {
         console.log("error inserting into participants")
         console.log(e);
     }
@@ -134,12 +134,21 @@ module.exports.enqueue = async function (userId, stationName) {
 }
 
 module.exports.leaveQueue = async function (userId) {
-        const station = getStation(userId);
-        //TODO: check null
-        const statement = `
+    const station = getStation(userId);
+    //TODO: check null
+    const statement = `
             update stations.$1
             set hasLeft = TRUE
             where userId = $2`;
-        const args = [station, userId];
-        await db.query(statement, args);
+    const args = [station, userId];
+    await db.query(statement, args);
+}
+
+module.exports.getWaitInfo = async function (station) {
+    const timePer = await queries.getTimeEach(station);
+    const queueLength = await queries.getQueueLength(station);
+    const text = "You're in the queue for: " + station +
+        "\n\nThere are " + (queueLength - 1) + " participants ahead of you." +
+        "\n\nThe expected waiting time is " + (queueLength - 1) * timePer + " minutes.";
+    return text;
 }
