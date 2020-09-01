@@ -5,6 +5,7 @@ const queries = require('./db/queries');
 const stations = require('./handlers/stations');
 const joinQueue = require('./handlers/joinQueue');
 const waitTime = require('./handlers/waitTime');
+const leaveQueue = require('./handlers/leaveQueue');
 
 let bot;
 if (process.env.NODE_ENV === 'production') {
@@ -60,6 +61,7 @@ bot.on('message', (msg) => {
             joinQueue.init(msg);
             break;
         case '/leavequeue':
+            leaveQueue.init(msg);
             break;
         case '/waittime':
             waitTime.init(msg);
@@ -90,9 +92,12 @@ bot.on('callback_query', (query) => {
 
     let data = JSON.parse(query.data);
     if (data.hasOwnProperty("c")) {
-        switch (data.c) {
+        switch (data.c.toLowerCase()) {
             case 'join':
                 joinQueue.callback(query);
+                break;
+            case 'leavequeue':
+                leaveQueue.callback(query);
                 break;
             case 'cancel':
                 cancelCallback(query);
