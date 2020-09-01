@@ -154,18 +154,36 @@ module.exports.enqueue = async function (userId, stationName) {
         console.log("error inserting into participants")
         console.log(e);
     }
-    //TODO: add to master.participants
 }
 
 module.exports.leaveQueue = async function (userId) {
-    const station = getStation(userId);
-    //TODO: check null
-    const statement = `
-            update stations.$1
-            set hasLeft = TRUE
-            where userId = $2`;
-    const args = [station, userId];
-    await db.query(statement, args);
+    const stationName = await module.exports.getStation(userId);
+    if(stationName === null){
+        return false;
+    }
+    try{
+        const statement = `
+            DELETE FROM stations.` + stationName + `
+            where "userID" = $1`;
+        const args = [userId];
+        await db.query(statement, args);
+    } catch (e) {
+        console.log("error deleting from station")
+        console.log(e);
+        return false;
+    }
+    try{
+        const statement = `
+            DELETE FROM master.participants
+            where "userID" = $1`;
+        const args = [userId];
+        await db.query(statement, args);
+        return true;
+    } catch (e) {
+        console.log("error deleting from master.participants")
+        console.log(e);
+        return false;
+    }
 }
 
 module.exports.getWaitInfo = async function (station, userID) {
