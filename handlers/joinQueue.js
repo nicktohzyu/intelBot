@@ -4,12 +4,6 @@ const messenger = require('../messenger');
 
 const alreadyQueuedMsg = "Error: you're already in a queue!\n\n";
 
-let bot;
-
-module.exports.initbot = function (b) {
-    bot = b;
-}
-
 module.exports.init = async function (msg) {
     try {
         const station = await queries.getStation(msg.from.id);

@@ -4,12 +4,6 @@ const messenger = require('../messenger');
 
 const notQueuedMsg = "Error: you're not currently in a queue!";
 
-let bot;
-
-module.exports.initbot = function (b) {
-    bot = b;
-}
-
 module.exports.init = async function (msg) {
     try {
         const station = await queries.getStation(msg.from.id);
