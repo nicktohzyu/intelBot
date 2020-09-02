@@ -1,6 +1,6 @@
 const db = require('./db');
-const assert = require("assert");
-// const messenger = require('../messenger');
+// const assert = require("assert");
+const messenger = require('../messenger');
 // const sprintf = require("sprintf-js").sprintf;
 let bot;
 
@@ -216,3 +216,29 @@ module.exports.getFrontUserId = async function (stationName) {
     const res = await db.query(statement, args);
     return (res.rowCount > 0) ? res.rows[0].userID : null;
 }
+
+module.exports.frontText = async function (groupID) {
+    const station = await module.exports.getAdminStation(groupID);
+    if (station === null) {
+        return "Error, unable to find station";
+    } else {
+        const participantId = await module.exports.getFrontUserId(station);
+        if (participantId === null) {
+            return "There are no participants in the queue.";
+        } else {
+            const userObj = await messenger.getChat(participantId);
+            const username = userObj.username;
+            const text = "Username of participant at front of queue: \n@" + username;
+            return text;
+        }
+    }
+}
+
+// module.exports.getGroupFront = async function (groupID) {
+//     const station = await module.exports.getAdminStation(groupID);
+//     if (station === null) {
+//         return null;
+//     } else {
+//         return await module.exports.getFrontUserId(station);
+//     }
+// }
