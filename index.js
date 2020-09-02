@@ -8,6 +8,7 @@ const waitTime = require('./handlers/waitTime');
 const leaveQueue = require('./handlers/leaveQueue');
 const queueLength = require('./handlers/queueLength');
 const getFront = require('./handlers/getFront');
+const removeFront = require('./handlers/removeFront');
 
 let bot;
 if (process.env.NODE_ENV === 'production') {
@@ -81,6 +82,7 @@ bot.on('message', (msg) => {
         case '/pingfront':
             break;
         case '/removefront':
+            removeFront.init(msg);
             break;
         case '/updatetimeperperson':
             break;
@@ -103,6 +105,9 @@ bot.on('callback_query', (query) => {
                 break;
             case 'leavequeue':
                 leaveQueue.callback(query);
+                break;
+            case 'remove':
+                removeFront.callback(query);
                 break;
             case 'cancel':
                 cancelCallback(query);
