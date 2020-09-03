@@ -13,7 +13,7 @@ module.exports.init = async function (msg) {
             num = parseInt(msg.text.split(" ")[1]);
             if(!Number.isInteger(num)) throw "not a valid number";
         } catch (e) {
-            const text = "Error, invalid input. This command is used to update the estimated time per person in minutes." +
+            const text = "Error, invalid input. This command is used to update the estimated time per participant in minutes." +
                 "\nExample format:\n" +
                 "/settime 5";
             messenger.send(msg.chat.id, text);
