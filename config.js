@@ -22,8 +22,13 @@ module.exports.db_config = {
     idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
 };
 
-module.exports.help = "";
-module.exports.about = "";
+module.exports.help = "/queueinfo - (admin) get into on the station's queue\n" +
+    "/setmax - (admin) update the max queue length\n" +
+    "/settime - (admin) update the estimated time per participant in minutes\n" +
+    "/getfront - (admin) get the username of the participant in front\n" +
+    "/removefront - (admin) confirmation dialog to remove participant in front\n" +
+    "/getall - (admin) get the usernames of all participants (slow)";
+module.exports.about = " ";
 module.exports.start = "bot started";
 
 module.exports.superusers = [653601805] //array of user id
