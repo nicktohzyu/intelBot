@@ -62,10 +62,15 @@ bot.on('message', (msg) => {
             break;
         //for participants:
         case '/stations':
-            stations.init(msg);
+            //TODO
+            // add link to website
+
+
+            // stations.init(msg);
             break;
         case '/joinqueue':
             joinQueue.init(msg);
+            //TODO: message admin group when someone joins an empty queue
             break;
         case '/leavequeue':
             leaveQueue.init(msg);
@@ -88,6 +93,8 @@ bot.on('message', (msg) => {
             getFront.init(msg);
             break;
         case '/pingfront':
+            //TODO:
+            // automatically ping after remove front
             break;
         case '/removefront':
             removeFront.init(msg);

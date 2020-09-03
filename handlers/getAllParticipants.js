@@ -18,6 +18,7 @@ module.exports.init = async function (msg) {
     if(userIDs === null){
         messenger.send(msg.chat.id, "There are no participants in the queue.");
     }
+    //TODO: expand and catch null
     const promisedUsernames = userIDs.map(async IDstr => (await messenger.getChat(parseInt(IDstr))).username)
     // await Promise.all(promisedUsernames);
     let text = "Username of participants by queue order:";

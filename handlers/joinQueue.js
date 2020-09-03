@@ -7,6 +7,7 @@ const alreadyQueuedMsg = "Error: you're already in a queue!\n\n";
 module.exports.init = async function (msg) {
     if (msg.from.id !== msg.chat.id) {
         const text = "This command should be used by participants as a direct message to the bot.";
+        //TODO: add link to bot
         messenger.send(msg.chat.id, text);
         return;
     }
