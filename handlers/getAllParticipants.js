@@ -3,6 +3,11 @@ const messenger = require('../messenger');
 
 // get the telegram handle of the front person
 module.exports.init = async function (msg) {
+    if (msg.from.id === msg.chat.id) {
+        const text = "This command can only be used in an authorized group chat.";
+        messenger.send(msg.chat.id, text);
+        return;
+    }
     const station = await queries.getAdminStation(msg.chat.id);
     if (msg.from.id === msg.chat.id || station === null) {
         const text = "This command can only be used in an authorized group chat.";
@@ -17,7 +22,7 @@ module.exports.init = async function (msg) {
     // await Promise.all(promisedUsernames);
     let text = "Username of participants by queue order:";
     for (let i = 0; i < promisedUsernames.length; i++) {
-        text += "\n" + (i+1) + ". " + await promisedUsernames[i];
+        text += "\n" + (i+1) + ". @" + await promisedUsernames[i];
     }
     messenger.send(msg.chat.id, text);
 }
