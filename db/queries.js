@@ -103,7 +103,7 @@ module.exports.getQueueLength = async function (stationName) {
     const statement = `SELECT count(*) AS length FROM stations.` + stationName + `;`;
     const args = [];
     const res = await db.query(statement, args);
-    return (res.rowCount > 0) ? res.rows[0].length : null;
+    return (res.rowCount > 0) ? parseInt(res.rows[0].length) : null;
 }
 
 const getQueueLengthAhead = async function (stationName, userID) {
@@ -114,20 +114,28 @@ const getQueueLengthAhead = async function (stationName, userID) {
     }
     const statement =
         `SELECT count(*) AS length FROM stations.` + stationName + `
-         WHERE "queueNumber" <= ($1);`;
+         WHERE "queueNumber" < ($1);`;
     const args = [queueNumber];
     const res = await db.query(statement, args);
     return (res.rowCount > 0) ? res.rows[0].length : null;
 }
 
 const getTimeEach = async function (stationName) {
-    //gets the station a user is queueing for
     const statement = `
             select "timeEach" from master.stations
             where name = $1;`;
     const args = [stationName];
     const res = await db.query(statement, args);
     return (res.rowCount > 0) ? res.rows[0].timeEach : null;
+}
+
+module.exports.getMaxQueueLength = async function (stationName) {
+    const statement = `
+            select "maxQueueLength" from master.stations
+            where name = $1;`;
+    const args = [stationName];
+    const res = await db.query(statement, args);
+    return (res.rowCount > 0) ? res.rows[0].maxQueueLength : null;
 }
 
 module.exports.enqueue = async function (userId, stationName) {
@@ -188,11 +196,12 @@ module.exports.leaveQueue = async function (userId) {
 }
 
 module.exports.getWaitInfo = async function (station, userID) {
+    //get wait info for user in a queue
     const timePer = await getTimeEach(station);
-    const queueLength = await getQueueLengthAhead(station, userID);
+    const queueLengthAhead = await getQueueLengthAhead(station, userID);
     const text = "You're in the queue for: " + station +
-        "\n\nThere are " + (queueLength - 1) + " participants ahead of you." +
-        "\n\nThe expected waiting time is " + (queueLength - 1) * timePer + " minutes.";
+        "\n\nThere are " + (queueLengthAhead) + " participants ahead of you." +
+        "\n\nThe expected waiting time is " + (queueLengthAhead * timePer) + " minutes.";
     return text;
 }
 
