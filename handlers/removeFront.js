@@ -69,8 +69,8 @@ module.exports.callback = async function (query) {
             null);
 
         //optional: sends info about the next person
-        const message = await queries.frontText(query.chat.id);
-        messenger.send(query.chat.id, message);
+        const message = await queries.frontText(query.message.chat.id);
+        messenger.send(query.message.chat.id, message);
 
     } catch (e) {
         console.log(e);
