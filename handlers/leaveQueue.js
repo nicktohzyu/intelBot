@@ -5,6 +5,11 @@ const messenger = require('../messenger');
 const notQueuedMsg = "Error: you're not currently in a queue!";
 
 module.exports.init = async function (msg) {
+    if (msg.from.id !== msg.chat.id) {
+        const text = "This command should be used by participants as a direct message to the bot.";
+        messenger.send(msg.chat.id, text);
+        return;
+    }
     try {
         const station = await queries.getStation(msg.from.id);
         if (station === null) {
