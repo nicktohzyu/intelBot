@@ -73,6 +73,9 @@ bot.on('message', (msg) => {
             break;
         //for stationmasters:
         case '/setmax':
+            setMax.init(msg);
+            break;
+        case '/settimeperperson':
             break;
         case '/queuelength':
             queueLength.init(msg);
@@ -84,8 +87,6 @@ bot.on('message', (msg) => {
             break;
         case '/removefront':
             removeFront.init(msg);
-            break;
-        case '/updatetimeperperson':
             break;
         case '/getall':
             break;

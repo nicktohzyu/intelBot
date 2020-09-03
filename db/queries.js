@@ -243,6 +243,15 @@ module.exports.frontText = async function (groupID) {
     }
 }
 
+module.exports.setMax = async function (station, num) {
+    const statement = `
+            update master.stations
+            set "maxQueueLength" = $2
+            where name = $1`;
+    const args = [station, num];
+    await db.query(statement, args);
+}
+
 // module.exports.getGroupFront = async function (groupID) {
 //     const station = await module.exports.getAdminStation(groupID);
 //     if (station === null) {
