@@ -6,11 +6,13 @@ const stations = require('./handlers/stations');
 const joinQueue = require('./handlers/joinQueue');
 const waitTime = require('./handlers/waitTime');
 const leaveQueue = require('./handlers/leaveQueue');
+
+const setMax = require('./handlers/setMax');
+const setTime = require('./handlers/setTime');
 const queueInfo = require('./handlers/queueInfo');
 const getFront = require('./handlers/getFront');
 const removeFront = require('./handlers/removeFront');
-const setMax = require('./handlers/setMax');
-const setTime = require('./handlers/setTime');
+const getAll = require('./handlers/getAllParticipants');
 
 let bot;
 if (process.env.NODE_ENV === 'production') {
@@ -91,6 +93,7 @@ bot.on('message', (msg) => {
             removeFront.init(msg);
             break;
         case '/getall':
+            getAll.init(msg);
             break;
         case '/messageall':
             break;

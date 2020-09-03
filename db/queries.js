@@ -226,6 +226,20 @@ module.exports.getFrontUserId = async function (stationName) {
     return (res.rowCount > 0) ? res.rows[0].userID : null;
 }
 
+module.exports.getAllUserId = async function (stationName) {
+    //returns userID of the front participant
+    const statement =
+        `SELECT "userID" FROM stations.` + stationName + `
+         ORDER BY "queueNumber";`;
+    const args = [];
+    const res = await db.query(statement, args);
+    if(res.rowCount === 0){
+        return null;
+    }
+    const arr = res.rows.map(r => r.userID);
+    return arr;
+}
+
 module.exports.frontText = async function (groupID) {
     const station = await module.exports.getAdminStation(groupID);
     if (station === null) {
