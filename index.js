@@ -9,6 +9,7 @@ const leaveQueue = require('./handlers/leaveQueue');
 const queueLength = require('./handlers/queueLength');
 const getFront = require('./handlers/getFront');
 const removeFront = require('./handlers/removeFront');
+const setMax = require('./handlers/setMax');
 
 let bot;
 if (process.env.NODE_ENV === 'production') {
@@ -44,7 +45,7 @@ bot.on('message', (msg) => {
         }
         command = tokens[0];
     } else {
-        command = msg.text;
+        command = msg.text.split(" ")[0];
     }
     switch (command.toLowerCase()) {
         case '/about':
