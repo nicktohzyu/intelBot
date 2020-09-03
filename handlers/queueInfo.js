@@ -9,9 +9,11 @@ module.exports.init = async function (msg) {
         messenger.send(msg.chat.id, text);
     } else {
         const length = await queries.getQueueLength(station);
-        const maxQueue = await queries.getMaxQueueLength(station)
+        const maxQueue = await queries.getMaxQueueLength(station);
+        const timeEach = await queries.getTimeEach(station);
         const text = "Number of participants queueing: " + length +
-            "\n\nThe maximum number of participants is " + maxQueue;
+            ".\nThe maximum number of participants is " + maxQueue +
+            ".\nThe estimated time per participant is " + timeEach + " minutes.";
         messenger.send(msg.chat.id, text);
     }
 }

@@ -6,7 +6,7 @@ const stations = require('./handlers/stations');
 const joinQueue = require('./handlers/joinQueue');
 const waitTime = require('./handlers/waitTime');
 const leaveQueue = require('./handlers/leaveQueue');
-const queueLength = require('./handlers/queueLength');
+const queueInfo = require('./handlers/queueInfo');
 const getFront = require('./handlers/getFront');
 const removeFront = require('./handlers/removeFront');
 const setMax = require('./handlers/setMax');
@@ -79,8 +79,8 @@ bot.on('message', (msg) => {
         case '/settime':
             setTime.init(msg);
             break;
-        case '/queuelength':
-            queueLength.init(msg);
+        case '/queueinfo':
+            queueInfo.init(msg);
             break;
         case '/getfront':
             getFront.init(msg);
