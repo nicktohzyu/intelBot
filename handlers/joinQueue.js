@@ -9,7 +9,6 @@ module.exports.init = async function (msg) {
         const station = await queries.getStation(msg.from.id);
         if (station !== null) {
             messenger.send(msg.from.id, alreadyQueuedMsg + await queries.getWaitInfo(station, msg.from.id));
-            //TODO: send waitTime message
             return;
         }
         const stationNames = await queries.getStations();
@@ -19,6 +18,7 @@ module.exports.init = async function (msg) {
             ik.addRow({text: stationNames[i], callback_data: JSON.stringify(data)})
         }
         ik.addRow({text: 'Cancel', callback_data: JSON.stringify({c: "cancel"})});
+        //TODO: send list of stations and wait time
         const text = 'Which station will you queue for?';
         messenger.send(msg.from.id, text, ik.build());
     } catch (e) {
@@ -30,25 +30,34 @@ module.exports.callback = async function (query) {
     try {
         const station = await queries.getStation(query.from.id);
         if (station !== null) {
-            messenger.send(query.from.id, alreadyQueuedMsg + await queries.getWaitInfo(station, msg.from.id));
             messenger.edit(
                 query.message.chat.id,
                 query.message.message_id,
                 null,
-                "Error joining queue",
+                alreadyQueuedMsg + await queries.getWaitInfo(station, query.from.id),
                 null);
-            //TODO: send waitTime message
             return;
         }
         const data = JSON.parse(query.data);
-        await queries.enqueue(query.from.id, data.s);
-        messenger.edit(
-            query.message.chat.id,
-            query.message.message_id,
-            null,
-            "Successfully added to queue\n\n" + await queries.getWaitInfo(data.s, query.from.id),
-            null);
-        //TODO: notify success, call waittime?
+        //TODO: check if queue length > maxlength
+        const queueLength = await queries.getQueueLength(data.s);
+        const maxQueueLength = await queries.getMaxQueueLength(data.s);
+        if (maxQueueLength !== null && queueLength >= maxQueueLength) {
+            messenger.edit(
+                query.message.chat.id,
+                query.message.message_id,
+                null,
+                "Error: the queue for " + data.s + " is too full. Try again later, or queue for another station.",
+                null);
+        } else {
+            await queries.enqueue(query.from.id, data.s);
+            messenger.edit(
+                query.message.chat.id,
+                query.message.message_id,
+                null,
+                "Successfully added to queue\n\n" + await queries.getWaitInfo(data.s, query.from.id),
+                null);
+        }
     } catch (e) {
         console.log(e);
     }
