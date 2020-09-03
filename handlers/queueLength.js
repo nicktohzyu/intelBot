@@ -9,7 +9,9 @@ module.exports.init = async function (msg) {
         messenger.send(msg.chat.id, text);
     } else {
         const length = await queries.getQueueLength(station);
-        const text = "Number of participants queueing: " + length;
+        const maxQueue = await queries.getMaxQueueLength(station)
+        const text = "Number of participants queueing: " + length +
+            "\n\nThe maximum number of participants is " + maxQueue;
         messenger.send(msg.chat.id, text);
     }
 }
