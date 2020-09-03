@@ -1,7 +1,7 @@
 const TelegramBot = require('node-telegram-bot-api');
 const {about, bot_name, debug, help, start, token} = require('./config');
 const messenger = require('./messenger');
-const queries = require('./db/queries');
+// const queries = require('./db/queries');
 const stations = require('./handlers/stations');
 const joinQueue = require('./handlers/joinQueue');
 const waitTime = require('./handlers/waitTime');
@@ -10,6 +10,7 @@ const queueLength = require('./handlers/queueLength');
 const getFront = require('./handlers/getFront');
 const removeFront = require('./handlers/removeFront');
 const setMax = require('./handlers/setMax');
+const setTime = require('./handlers/setTime');
 
 let bot;
 if (process.env.NODE_ENV === 'production') {
@@ -75,7 +76,8 @@ bot.on('message', (msg) => {
         case '/setmax':
             setMax.init(msg);
             break;
-        case '/settimeperperson':
+        case '/settime':
+            setTime.init(msg);
             break;
         case '/queuelength':
             queueLength.init(msg);

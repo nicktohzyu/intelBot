@@ -120,7 +120,7 @@ const getQueueLengthAhead = async function (stationName, userID) {
     return (res.rowCount > 0) ? res.rows[0].length : null;
 }
 
-const getTimeEach = async function (stationName) {
+module.exports.getTimeEach = async function (stationName) {
     const statement = `
             select "timeEach" from master.stations
             where name = $1;`;
@@ -197,7 +197,7 @@ module.exports.leaveQueue = async function (userId) {
 
 module.exports.getWaitInfo = async function (station, userID) {
     //get wait info for user in a queue
-    const timePer = await getTimeEach(station);
+    const timePer = await module.exports.getTimeEach(station);
     const queueLengthAhead = await getQueueLengthAhead(station, userID);
     const text = "You're in the queue for: " + station +
         "\n\nThere are " + (queueLengthAhead) + " participants ahead of you." +
@@ -247,6 +247,15 @@ module.exports.setMax = async function (station, num) {
     const statement = `
             update master.stations
             set "maxQueueLength" = $2
+            where name = $1`;
+    const args = [station, num];
+    await db.query(statement, args);
+}
+
+module.exports.setTimeEach = async function (station, num) {
+    const statement = `
+            update master.stations
+            set "timeEach" = $2
             where name = $1`;
     const args = [station, num];
     await db.query(statement, args);
