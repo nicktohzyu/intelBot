@@ -18,12 +18,26 @@ module.exports.init = async function (msg) {
     if(userIDs === null){
         messenger.send(msg.chat.id, "There are no participants in the queue.");
     }
+    async function getUserHandle(IDstr){
+        //returns string with the '@'
+        const ID = parseInt(IDstr);
+        if(!Number.isInteger(ID)){
+            return "<error>";
+        }
+        try {
+            const userName = (await messenger.getChat(ID)).username
+            return '. @' + userName;
+        } catch (e) {
+            console.log(e);
+            return "<error>";
+        }
+    }
     //TODO: expand and catch null
-    const promisedUsernames = userIDs.map(async IDstr => (await messenger.getChat(parseInt(IDstr))).username)
+    const promisedUserHandles = userIDs.map(getUserHandle)
     // await Promise.all(promisedUsernames);
     let text = "Username of participants by queue order:";
-    for (let i = 0; i < promisedUsernames.length; i++) {
-        text += "\n" + (i+1) + ". @" + await promisedUsernames[i];
+    for (let i = 0; i < promisedUserHandles.length; i++) {
+        text += "\n" + (i+1) + await promisedUserHandles[i];
     }
     messenger.send(msg.chat.id, text);
 }
