@@ -1,12 +1,13 @@
 const queries = require('../db/queries');
 const {InlineKeyboard} = require('node-telegram-keyboard-wrapper');
 const messenger = require('../messenger');
+const  {bot_name} = require('../config');
 
 const notQueuedMsg = "Error: you're not currently in a queue!";
 
 module.exports.init = async function (msg) {
     if (msg.from.id !== msg.chat.id) {
-        const text = "This command should be used by participants as a direct message to the bot.";
+        const text = "This command should be used by participants as a direct message to me at @" + bot_name;
         messenger.send(msg.chat.id, text);
         return;
     }
