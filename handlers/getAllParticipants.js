@@ -17,8 +17,8 @@ module.exports.init = async function (msg) {
     const userIDs = await queries.getAllUserId(station);
     if(userIDs === null){
         messenger.send(msg.chat.id, "There are no participants in the queue.");
+        return;
     }
-
     const promisedUserHandles = userIDs.map(messenger.getUsername)
     // await Promise.all(promisedUsernames);
     let text = "Username of participants by queue order:";
