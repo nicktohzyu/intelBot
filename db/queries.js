@@ -74,7 +74,7 @@ module.exports.getStations = async function () {
 		order by name`;
     const args = [];
     const res = await db.query(statement, args);
-    const stationNames = res.rows.map(r => r.name); //somehow can't return this directly?
+    const stationNames = res.rows.map(r => r.name.trim()); //somehow can't return this directly?
     return stationNames;
 }
 
@@ -96,7 +96,7 @@ module.exports.getStation = async function (userId) {
             where "userID" = $1`;
     const args = [userId];
     const res = await db.query(statement, args);
-    return (res.rowCount > 0) ? res.rows[0].station : null;
+    return (res.rowCount > 0) ? res.rows[0].station.trim() : null;
 }
 
 const getQueueNumber = async function (userId) {
@@ -111,7 +111,7 @@ const getQueueNumber = async function (userId) {
 
 module.exports.getQueueLength = async function (stationName) {
     //gets the station a user is queueing for
-    const statement = `SELECT count(*) AS length FROM stations.` + stationName + `;`;
+    const statement = `SELECT count(*) AS length FROM stations."` + stationName + `";`;
     const args = [];
     const res = await db.query(statement, args);
     return (res.rowCount > 0) ? parseInt(res.rows[0].length) : null;
@@ -124,7 +124,7 @@ const getQueueLengthAhead = async function (stationName, userID) {
         return null;
     }
     const statement =
-        `SELECT count(*) AS length FROM stations.` + stationName + `
+        `SELECT count(*) AS length FROM stations."` + stationName + `"
          WHERE "queueNumber" < ($1);`;
     const args = [queueNumber];
     const res = await db.query(statement, args);
@@ -163,7 +163,7 @@ module.exports.enqueue = async function (userId, stationName) {
     try {
         const statement = `
             insert into
-                stations.` + stationName + `	("userID")
+                stations."` + stationName + `"	("userID")
                 values	($1)
                 RETURNING "queueNumber";`;
         const args = [userId];
@@ -192,7 +192,7 @@ module.exports.leaveQueue = async function (userId) {
     }
     try{
         const statement = `
-            DELETE FROM stations.` + stationName + `
+            DELETE FROM stations."` + stationName + `"
             where "userID" = $1`;
         const args = [userId];
         await db.query(statement, args);
@@ -238,7 +238,7 @@ module.exports.getAdminStation = async function (groupId) {
 module.exports.getFrontUserId = async function (stationName) {
     //returns userID of the front participant
     const statement =
-        `SELECT "userID" FROM stations.` + stationName + `
+        `SELECT "userID" FROM stations."` + stationName + `"
          ORDER BY "queueNumber" 
          LIMIT 1;`;
     const args = [];
@@ -249,7 +249,7 @@ module.exports.getFrontUserId = async function (stationName) {
 module.exports.getAllUserId = async function (stationName) {
     //returns userID of the front participant
     const statement =
-        `SELECT "userID" FROM stations.` + stationName + `
+        `SELECT "userID" FROM stations."` + stationName + `"
          ORDER BY "queueNumber";`;
     const args = [];
     const res = await db.query(statement, args);
