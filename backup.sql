@@ -456,7 +456,7 @@ COPY master.participants ("userID", station, "queueNumber") FROM stdin;
 COPY master.stations (name, "groupID", "timeEach", "frontMessage", "maxQueueLength", description) FROM stdin;
 station1	-440049325	5	you're next	5	none provided
 station2	-495549072	5	you're next2	999	none provided
-﻿Wed Personal	-472564065	10	\N	10	none provided
+Wed Personal	-472564065	10	\N	10	none provided
 Wed Personal 2	-468020530	10	\N	10	none provided
 Wed Linguistic	-469688493	10	\N	10	none provided
 Thor's Linguistic	-473066704	10	\N	10	none provided
