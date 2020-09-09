@@ -8,7 +8,6 @@ const alreadyQueuedMsg = "Error: you're already in a queue!\n\n";
 module.exports.init = async function (msg) {
     if (msg.from.id !== msg.chat.id) {
         const text = "This command should be used by participants as a direct message to me at @" + bot_name;
-        //TODO: add link to bot
         messenger.send(msg.chat.id, text);
         return;
     }
@@ -46,7 +45,6 @@ module.exports.callback = async function (query) {
             return;
         }
         const data = JSON.parse(query.data);
-        //TODO: check if queue length > maxlength
         const queueLength = await queries.getQueueLength(data.s);
         const maxQueueLength = await queries.getMaxQueueLength(data.s);
         if (maxQueueLength !== null && queueLength >= maxQueueLength) {
