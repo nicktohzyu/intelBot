@@ -232,7 +232,7 @@ module.exports.getAdminStation = async function (groupId) {
             where "groupID" = $1`;
     const args = [groupId];
     const res = await db.query(statement, args);
-    return (res.rowCount > 0) ? res.rows[0].name : null;
+    return (res.rowCount > 0) ? res.rows[0].name.trim() : null;
 }
 
 module.exports.getFrontUserId = async function (stationName) {
