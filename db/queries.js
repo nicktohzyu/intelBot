@@ -78,6 +78,17 @@ module.exports.getStations = async function () {
     return stationNames;
 }
 
+module.exports.getStationsDetails = async function () {
+    const statement = `
+		select name, description
+		from master.stations
+		order by name`;
+    const args = [];
+    const res = await db.query(statement, args);
+    const details = res.rows.map(r => [r.name, r.description]); //somehow can't return this directly?
+    return details;
+}
+
 module.exports.getStation = async function (userId) {
     //gets the station a user is queueing for
     const statement = `
@@ -136,6 +147,15 @@ module.exports.getMaxQueueLength = async function (stationName) {
     const args = [stationName];
     const res = await db.query(statement, args);
     return (res.rowCount > 0) ? res.rows[0].maxQueueLength : null;
+}
+
+module.exports.getFrontMessage = async function (stationName) {
+    const statement = `
+            select "frontMessage" from master.stations
+            where name = $1;`;
+    const args = [stationName];
+    const res = await db.query(statement, args);
+    return (res.rowCount > 0) ? res.rows[0].frontMessage : null;
 }
 
 module.exports.enqueue = async function (userId, stationName) {
@@ -249,9 +269,8 @@ module.exports.frontText = async function (groupID) {
         if (participantId === null) {
             return "There are no participants in the queue.";
         } else {
-            const userObj = await messenger.getChat(participantId);
-            const username = userObj.username;
-            const text = "Username of participant at front of queue: \n@" + username;
+            const username = await messenger.getUsername(participantId);
+            const text = "Username of participant at front of queue: \n" + username;
             return text;
         }
     }

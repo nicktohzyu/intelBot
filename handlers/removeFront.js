@@ -58,19 +58,27 @@ module.exports.callback = async function (query) {
                 null);
             return;
         }
-        queries.leaveQueue(participantId);
-        const userObj = await messenger.getChat(participantId);
-        const username = userObj.username;
-        messenger.edit(
-            query.message.chat.id,
-            query.message.message_id,
-            null,
-            "Successfully removed @" + username,
-            null);
+        const success = await queries.leaveQueue(participantId);
+        if(success){
+            const username = await messenger.getUsername(participantId);
+            messenger.edit(
+                query.message.chat.id,
+                query.message.message_id,
+                null,
+                "Successfully removed " + username,
+                null);
 
-        //optional: sends info about the next person
-        const message = await queries.frontText(query.message.chat.id);
-        messenger.send(query.message.chat.id, message);
+            //optional: sends info about the next person
+            const message = await queries.frontText(query.message.chat.id);
+            messenger.send(query.message.chat.id, message);
+        } else {
+            messenger.edit(
+                query.message.chat.id,
+                query.message.message_id,
+                null,
+                "Error occured in removing participant",
+                null);
+        }
 
     } catch (e) {
         console.log(e);

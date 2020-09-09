@@ -68,6 +68,12 @@ module.exports.edit = async function (chat_id, message_id, inline_message_id, te
     }
 }
 
-module.exports.getChat = async function (chatId){
-    return await bot.getChat(chatId); //issue with default parameters
+module.exports.getUsername = async function (ID){
+    try {
+        const userName = (await bot.getChat(ID)).username
+        return '@' + userName;
+    } catch (e) {
+        console.log(e.message + " for userID" + ID);
+        return "<error getting username>";
+    }
 }
