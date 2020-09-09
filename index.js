@@ -21,8 +21,6 @@ if (process.env.NODE_ENV === 'production') {
 } else {
     bot = new TelegramBot(token, {polling: true});
 }
-// const stationNames = queries.getStations();
-// const stationsText = "The stations available are: \n" + stationNames.join("\n") //TODO: deal with async
 
 messenger.initBot(bot);
 
@@ -38,7 +36,7 @@ bot.on('message', (msg) => {
     }
     let command;
     if (msg.text == null) {
-        console.log("error: message text from " + msg.from.id + "is null");
+        console.log("warning: message text from " + msg.from.id + " is null");
         return;
     }
     if (msg.text.includes('@')) {
@@ -58,7 +56,7 @@ bot.on('message', (msg) => {
             messenger.send(msg.chat.id, help);
             break;
         case '/start':
-            messenger.send(msg.chat.id, start);
+            messenger.send(msg.chat.id, start + "\n" + about);
             break;
         //for participants:
         case '/stations':
