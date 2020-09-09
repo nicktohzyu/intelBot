@@ -9,7 +9,7 @@ module.exports.init = async function (msg) {
         return;
     }
     const station = await queries.getAdminStation(msg.chat.id);
-    if (msg.from.id === msg.chat.id || station === null) {
+    if (station === null) {
         const text = "This command can only be used in an authorized group chat.";
         messenger.send(msg.chat.id, text);
         return;
@@ -26,18 +26,17 @@ module.exports.init = async function (msg) {
         }
         try {
             const userName = (await messenger.getChat(ID)).username
-            return '. @' + userName;
+            return '@' + userName;
         } catch (e) {
             console.log(e);
             return "<error>";
         }
     }
-    //TODO: expand and catch null
     const promisedUserHandles = userIDs.map(getUserHandle)
     // await Promise.all(promisedUsernames);
     let text = "Username of participants by queue order:";
     for (let i = 0; i < promisedUserHandles.length; i++) {
-        text += "\n" + (i+1) + await promisedUserHandles[i];
+        text += "\n" + (i+1) + '. ' + await promisedUserHandles[i];
     }
     messenger.send(msg.chat.id, text);
 }
