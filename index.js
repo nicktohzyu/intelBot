@@ -2,7 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const {about, bot_name, debug, help, start, token} = require('./config');
 const messenger = require('./messenger');
 // const queries = require('./db/queries');
-const stations = require('./handlers/stations');
+const viewStations = require('./handlers/viewStations');
 const joinQueue = require('./handlers/joinQueue');
 const waitTime = require('./handlers/waitTime');
 const leaveQueue = require('./handlers/leaveQueue');
@@ -59,12 +59,12 @@ bot.on('message', (msg) => {
             messenger.send(msg.chat.id, start + "\n" + about);
             break;
         //for participants:
-        case '/stations':
+        case '/viewstations':
             //TODO
             // add link to website
 
 
-            // stations.init(msg);
+            // viewStations.init(msg);
             break;
         case '/joinqueue':
             joinQueue.init(msg);

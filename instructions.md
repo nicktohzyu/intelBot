@@ -19,7 +19,7 @@ Get the telegram username of the person at the front with /getfront
 Get the telegram username of everyone in the queue with /getall (this stresses the bot so please don't spam it)
 
 User commands:
-/stations - gets a text message about the stations and their queue length  
+/viewstations - gets a text message about the stations and their queue length  
 /joinqueue - select a station to queue for  
 /waittime - check which station you're queueing for and see the waiting time  
 /leavequeue - stop queueing for your current station (confirmation dialogue)  

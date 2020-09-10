@@ -24,7 +24,7 @@ module.exports.db_config = {
 
 module.exports.help =`
 For participants:
-/stations - gets a text message about the stations and their queue length  
+/viewstations - gets a text message about the stations and their queue length  
 /joinqueue - select a station to queue for  
 /waittime - check which station you're queueing for and see the waiting time  
 /leavequeue - stop queueing for your current station (confirmation dialogue)  
