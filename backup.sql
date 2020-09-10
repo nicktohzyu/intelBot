@@ -446,6 +446,22 @@ ALTER TABLE stations.station2 ALTER COLUMN "queueNumber" ADD GENERATED ALWAYS AS
 --
 
 COPY master.participants ("userID", station, "queueNumber") FROM stdin;
+70681348	Wed Music	7
+340628101	Wed Music	8
+499898543	Wed Music	9
+646785010	Wed Music	10
+348939716	Wed Personal	8
+126913124	Wed Linguistic	4
+653421992	Wed Linguistic	5
+542451018	Wed Personal	9
+356312836	Wed Linguistic	6
+740489610	Wed Linguistic	7
+448252759	Thor's Musical	2
+571587629	Thor's Musical	3
+376289946	Thor's Musical	4
+367913189	Thor's Existential	2
+790145840	Thor's Existential	3
+678101743	Thor's Existential	4
 \.
 
 
@@ -456,17 +472,17 @@ COPY master.participants ("userID", station, "queueNumber") FROM stdin;
 COPY master.stations (name, "groupID", "timeEach", "frontMessage", "maxQueueLength", description) FROM stdin;
 station1	-440049325	5	you're next	5	none provided
 station2	-495549072	5	you're next2	999	none provided
-Wed Personal	-472564065	10	\N	10	none provided
-Wed Personal 2	-468020530	10	\N	10	none provided
 Wed Linguistic	-469688493	10	\N	10	none provided
 Thor's Linguistic	-473066704	10	\N	10	none provided
-Thor's Musical	-420749114	10	\N	10	none provided
-Thor's Body	-350918507	10	\N	10	none provided
 Thor's Existential	-492711691	10	\N	10	none provided
 Tue Station 1	-338776699	10	\N	10	none provided
 Tue Station 2	-470598822	10	\N	10	none provided
 Tue Station 3	-339213979	10	\N	10	none provided
+Wed Personal	-472564065	10	\N	10	none provided
 Wed Music	-435377964	10	\N	10	none provided
+Wed Personal 2	-468020530	20	\N	10	none provided
+Thor's Body	-350918507	10	\N	10	none provided
+Thor's Musical	-420749114	5	\N	10	none provided
 \.
 
 
@@ -491,6 +507,9 @@ COPY stations."Thor's Body" ("userID", "queueNumber") FROM stdin;
 --
 
 COPY stations."Thor's Existential" ("userID", "queueNumber") FROM stdin;
+367913189	2
+790145840	3
+678101743	4
 \.
 
 
@@ -507,6 +526,9 @@ COPY stations."Thor's Linguistic" ("userID", "queueNumber") FROM stdin;
 --
 
 COPY stations."Thor's Musical" ("userID", "queueNumber") FROM stdin;
+448252759	2
+571587629	3
+376289946	4
 \.
 
 
@@ -539,6 +561,10 @@ COPY stations."Tue Station 3" ("userID", "queueNumber") FROM stdin;
 --
 
 COPY stations."Wed Linguistic" ("userID", "queueNumber") FROM stdin;
+126913124	4
+653421992	5
+356312836	6
+740489610	7
 \.
 
 
@@ -547,6 +573,10 @@ COPY stations."Wed Linguistic" ("userID", "queueNumber") FROM stdin;
 --
 
 COPY stations."Wed Music" ("userID", "queueNumber") FROM stdin;
+70681348	7
+340628101	8
+499898543	9
+646785010	10
 \.
 
 
@@ -555,6 +585,8 @@ COPY stations."Wed Music" ("userID", "queueNumber") FROM stdin;
 --
 
 COPY stations."Wed Personal" ("userID", "queueNumber") FROM stdin;
+348939716	8
+542451018	9
 \.
 
 
@@ -586,28 +618,28 @@ COPY stations.station2 ("userID", "queueNumber") FROM stdin;
 -- Name: Thor''s Body_queueNumber_seq; Type: SEQUENCE SET; Schema: stations; Owner: postgres
 --
 
-SELECT pg_catalog.setval('stations."Thor''''s Body_queueNumber_seq"', 1, false);
+SELECT pg_catalog.setval('stations."Thor''''s Body_queueNumber_seq"', 3, true);
 
 
 --
 -- Name: Thor''s Linguistic_queueNumber_seq; Type: SEQUENCE SET; Schema: stations; Owner: postgres
 --
 
-SELECT pg_catalog.setval('stations."Thor''''s Linguistic_queueNumber_seq"', 1, true);
+SELECT pg_catalog.setval('stations."Thor''''s Linguistic_queueNumber_seq"', 4, true);
 
 
 --
 -- Name: Thor''s Musical_queueNumber_seq; Type: SEQUENCE SET; Schema: stations; Owner: postgres
 --
 
-SELECT pg_catalog.setval('stations."Thor''''s Musical_queueNumber_seq"', 1, false);
+SELECT pg_catalog.setval('stations."Thor''''s Musical_queueNumber_seq"', 4, true);
 
 
 --
 -- Name: Thor's Existential_queueNumber_seq; Type: SEQUENCE SET; Schema: stations; Owner: postgres
 --
 
-SELECT pg_catalog.setval('stations."Thor''s Existential_queueNumber_seq"', 1, false);
+SELECT pg_catalog.setval('stations."Thor''s Existential_queueNumber_seq"', 4, true);
 
 
 --
@@ -635,35 +667,35 @@ SELECT pg_catalog.setval('stations."Tue Station 3_queueNumber_seq"', 1, false);
 -- Name: Wed Linguistic_queueNumber_seq; Type: SEQUENCE SET; Schema: stations; Owner: postgres
 --
 
-SELECT pg_catalog.setval('stations."Wed Linguistic_queueNumber_seq"', 1, false);
+SELECT pg_catalog.setval('stations."Wed Linguistic_queueNumber_seq"', 7, true);
 
 
 --
 -- Name: Wed Music Station Admin_queueNumber_seq; Type: SEQUENCE SET; Schema: stations; Owner: postgres
 --
 
-SELECT pg_catalog.setval('stations."Wed Music Station Admin_queueNumber_seq"', 1, true);
+SELECT pg_catalog.setval('stations."Wed Music Station Admin_queueNumber_seq"', 10, true);
 
 
 --
 -- Name: Wed Personal 2_queueNumber_seq; Type: SEQUENCE SET; Schema: stations; Owner: postgres
 --
 
-SELECT pg_catalog.setval('stations."Wed Personal 2_queueNumber_seq"', 1, false);
+SELECT pg_catalog.setval('stations."Wed Personal 2_queueNumber_seq"', 11, true);
 
 
 --
 -- Name: Wed Personal_queueNumber_seq; Type: SEQUENCE SET; Schema: stations; Owner: postgres
 --
 
-SELECT pg_catalog.setval('stations."Wed Personal_queueNumber_seq"', 1, true);
+SELECT pg_catalog.setval('stations."Wed Personal_queueNumber_seq"', 9, true);
 
 
 --
 -- Name: station1_queueNumber_seq; Type: SEQUENCE SET; Schema: stations; Owner: postgres
 --
 
-SELECT pg_catalog.setval('stations."station1_queueNumber_seq"', 39, true);
+SELECT pg_catalog.setval('stations."station1_queueNumber_seq"', 42, true);
 
 
 --
