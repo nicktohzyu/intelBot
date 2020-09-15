@@ -171,6 +171,7 @@ module.exports.enqueue = async function (userId, stationName) {
     } catch (e) {
         console.log("error inserting into station")
         console.log(e);
+        throw "error inserting into station";
     }
     try {
         const statement = `
@@ -182,6 +183,7 @@ module.exports.enqueue = async function (userId, stationName) {
     } catch (e) {
         console.log("error inserting into participants")
         console.log(e);
+        throw "error inserting into participants";
     }
 }
 
@@ -235,6 +237,16 @@ module.exports.getAdminStation = async function (groupId) {
     return (res.rowCount > 0) ? res.rows[0].name.trim() : null;
 }
 
+module.exports.getGroupId = async function (station) {
+    //gets the station an admin group controls
+    const statement = `
+            select "groupID" from master.stations
+            where "name" = $1`;
+    const args = [station];
+    const res = await db.query(statement, args);
+    return (res.rowCount > 0) ? res.rows[0].groupID : null;
+}
+
 module.exports.getFrontUserId = async function (stationName) {
     //returns userID of the front participant
     const statement =
@@ -262,6 +274,7 @@ module.exports.getAllUserId = async function (stationName) {
 
 module.exports.frontText = async function (groupID) {
     const station = await module.exports.getAdminStation(groupID);
+    //TODO: remove arrowhead style code using throw
     if (station === null) {
         return "Error, unable to find station";
     } else {

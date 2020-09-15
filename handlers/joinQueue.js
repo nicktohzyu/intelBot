@@ -34,34 +34,53 @@ module.exports.init = async function (msg) {
 
 module.exports.callback = async function (query) {
     try {
-        const station = await queries.getStation(query.from.id);
-        if (station !== null) {
+        const currStation = await queries.getStation(query.from.id);
+        if (currStation !== null) {
             messenger.edit(
                 query.message.chat.id,
                 query.message.message_id,
                 null,
-                alreadyQueuedMsg + await queries.getWaitInfo(station, query.from.id),
+                alreadyQueuedMsg + await queries.getWaitInfo(currStation, query.from.id),
                 null);
             return;
         }
         const data = JSON.parse(query.data);
-        const queueLength = await queries.getQueueLength(data.s);
-        const maxQueueLength = await queries.getMaxQueueLength(data.s);
+        const station = data.s;
+        const queueLength = await queries.getQueueLength(station);
+        const maxQueueLength = await queries.getMaxQueueLength(station);
         if (maxQueueLength !== null && queueLength >= maxQueueLength) {
             messenger.edit(
                 query.message.chat.id,
                 query.message.message_id,
                 null,
-                "Error: the queue for " + data.s + " is too full. Try again later, or queue for another station.",
+                "Error: the queue for " + station + " is too full. Try again later, or queue for another station.",
                 null);
         } else {
-            await queries.enqueue(query.from.id, data.s);
-            messenger.edit(
-                query.message.chat.id,
-                query.message.message_id,
-                null,
-                "Successfully added to queue\n\n" + await queries.getWaitInfo(data.s, query.from.id),
-                null);
+            try {
+                const initialQueueLength = await queries.getQueueLength(station);
+                await queries.enqueue(query.from.id, station);
+                messenger.edit(
+                    query.message.chat.id,
+                    query.message.message_id,
+                    null,
+                    "Successfully added to queue\n\n" + await queries.getWaitInfo(station, query.from.id),
+                    null);
+                if(initialQueueLength === 0){
+                    if(await queries.getQueueLength(station) > 0){
+                        //notify group that a participant has joined the empty queue
+                        const groupID = await queries.getGroupId(station);
+                        const text = "A participant has joined the empty queue.\n" + await queries.frontText(groupID);
+                        messenger.send(groupID, text);
+                    }
+                }
+            } catch (e) {
+                messenger.edit(
+                    query.message.chat.id,
+                    query.message.message_id,
+                    null,
+                    "An error occurred while joining the queue",
+                    null);
+            }
         }
     } catch (e) {
         console.log(e);
