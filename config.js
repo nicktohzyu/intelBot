@@ -24,19 +24,25 @@ module.exports.db_config = {
 
 module.exports.help =`
 For participants:
-/viewstations - gets a text message about the stations and their queue length  
+/stations - view list of stations and waiting time  
 /joinqueue - select a station to queue for  
 /waittime - check which station you're queueing for and see the waiting time  
 /leavequeue - stop queueing for your current station (confirmation dialogue)  
 
 For stationmasters:
 /queueinfo - (admin) get info on the station's queue
-/setmax - (admin) update the max queue length
-/settime - (admin) update the estimated time per participant in minutes
+/setmax - (admin) update the max queue length. Example: \`/setmax 10\`
+/settime - (admin) update the estimated time per participant in minutes. Example: \`/settime 10\`
 /getfront - (admin) get the username of the participant in front
 /removefront - (admin) confirmation dialog to remove participant in front
 /getall - (admin) get the usernames of all participants (slow)`;
 module.exports.about = "This bot was built by @nicktohzyu for Tembusu College's Intelligence Expo";
 module.exports.start = "Bot started.";
+module.exports.websiteText = `View more info about the stations at:
+2d catalog:
+https://artspaces.kunstmatrix.com/en/exhibition/1766352/catalog
+
+3d:
+https://artspaces.kunstmatrix.com/en/exhibition/1766352/expo2020\n\n`;
 
 module.exports.superusers = [653601805] //array of user id
