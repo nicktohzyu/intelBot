@@ -14,7 +14,7 @@ module.exports.init = async function (msg) {
     try {
         const station = await queries.getStation(msg.from.id);
         if (station !== null) {
-            messenger.send(msg.from.id, alreadyQueuedMsg + await queries.getWaitInfo(station, msg.from.id));
+            messenger.send(msg.from.id, alreadyQueuedMsg + await queries.getWaitInfo(station, msg.from.id) + "\nYou may use /leavequeue to leave the current queue.");
             return;
         }
         const stationNames = await queries.getStations();
@@ -25,7 +25,7 @@ module.exports.init = async function (msg) {
         }
         ik.addRow({text: 'Cancel', callback_data: JSON.stringify({c: "cancel"})});
         //TODO: send list of stations and wait time
-        const text = 'Which station will you queue for?';
+        const text = 'Which station will you queue for? By queueing for a station, you agree to share your telegram handle with the test administrators, which they will use to contact you about the test';
         messenger.send(msg.from.id, text, ik.build());
     } catch (e) {
         console.log(e);
