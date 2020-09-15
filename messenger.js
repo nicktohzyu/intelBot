@@ -49,7 +49,9 @@ module.exports.send = async function (chat_id, text, reply_markup = {}, startme_
         if (e.response.statusCode === 403) {
             //blocked: ETELEGRAM: 403 Forbidden: bot was blocked by the user
             //not started: bot can't initiate conversation with a user
-            sendStartMe(chat_id, startme_chat);
+            if(startme_chat){
+                sendStartMe(chat_id, startme_chat);
+            }
         } else {
             console.log(e);
         }
@@ -64,7 +66,6 @@ module.exports.edit = async function (chat_id, message_id, inline_message_id, te
         await bot.editMessageText(text,
             {chat_id: chat_id, message_id: message_id, reply_markup: reply_markup});
     } catch (e) {
-        //TODO: catch message not modified error, don't print if so
         try {
             if(e.response.body.description === "Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message"){
                 //ignore
