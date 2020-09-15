@@ -14,7 +14,7 @@ module.exports.init = async function (msg) {
     try {
         const station = await queries.getStation(msg.from.id);
         if (station !== null) {
-            messenger.send(msg.from.id, alreadyQueuedMsg + await queries.getWaitInfo(station, msg.from.id) + "\nYou may use /leavequeue to leave the current queue.");
+            messenger.send(msg.from.id, alreadyQueuedMsg + await queries.getWaitInfo(station, msg.from.id) + "\n\nYou may use /leavequeue to leave the current queue.");
             return;
         }
         const stationNames = await queries.getStations();
