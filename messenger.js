@@ -65,7 +65,16 @@ module.exports.edit = async function (chat_id, message_id, inline_message_id, te
             {chat_id: chat_id, message_id: message_id, reply_markup: reply_markup});
     } catch (e) {
         //TODO: catch message not modified error, don't print if so
-        console.log("error at messenger.edit");
+        try {
+            if(e.response.body.description === "Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message"){
+                //ignore
+                console.log("Error at edit message, likely due to repeated click")
+            } else {
+                console.log(e);
+            }
+        } catch (e2){
+            console.log(e);
+        }
     }
 }
 
