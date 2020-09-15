@@ -60,11 +60,7 @@ bot.on('message', (msg) => {
             break;
         //for participants:
         case '/viewstations':
-            //TODO
-            // add link to website
-
-
-            // viewStations.init(msg);
+            viewStations.init(msg);
             break;
         case '/joinqueue':
             joinQueue.init(msg);

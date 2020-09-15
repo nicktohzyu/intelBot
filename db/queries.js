@@ -85,7 +85,7 @@ module.exports.getStationsDetails = async function () {
 		order by name`;
     const args = [];
     const res = await db.query(statement, args);
-    const details = res.rows.map(r => [r.name, r.description]); //somehow can't return this directly?
+    const details = res.rows.map(r => [r.name.trim(), r.description.trim()]); //somehow can't return this directly?
     return details;
 }
 
