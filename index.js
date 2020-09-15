@@ -60,6 +60,7 @@ bot.on('message', (msg) => {
             break;
         //for participants:
         case '/viewstations':
+        case '/stations':
             viewStations.init(msg);
             break;
         case '/joinqueue':

@@ -78,16 +78,16 @@ module.exports.getStations = async function () {
     return stationNames;
 }
 
-module.exports.getStationsDetails = async function () {
-    const statement = `
-		select name, description
-		from master.stations
-		order by name`;
-    const args = [];
-    const res = await db.query(statement, args);
-    const details = res.rows.map(r => [r.name.trim(), r.description.trim()]); //somehow can't return this directly?
-    return details;
-}
+// module.exports.getStationsDetails = async function () {
+//     const statement = `
+// 		select name, description
+// 		from master.stations
+// 		order by name`;
+//     const args = [];
+//     const res = await db.query(statement, args);
+//     const details = res.rows.map(r => [r.name.trim(), r.description.trim()]); //somehow can't return this directly?
+//     return details;
+// }
 
 module.exports.getStation = async function (userId) {
     //gets the station a user is queueing for
