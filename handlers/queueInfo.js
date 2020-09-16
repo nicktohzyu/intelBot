@@ -18,7 +18,7 @@ module.exports.init = async function (msg) {
         const timeEach = await queries.getTimeEach(station);
         const text = "Number of participants queueing: " + length +
             ".\nThe maximum number of participants is " + maxQueue +
-            ".\nThe estimated time per participant is " + timeEach + " minutes.";
+            ".\nThe estimated waiting time per participant is " + timeEach + " minutes.";
         messenger.send(msg.chat.id, text);
     }
 }
