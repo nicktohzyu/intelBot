@@ -32,7 +32,7 @@ For participants:
 For stationmasters:
 /queueinfo - (admin) get info on the station's queue
 /setmax - (admin) update the max queue length. Example: \`/setmax 10\`
-/settime - (admin) update the estimated time per participant in minutes. Example: \`/settime 10\`
+/settime - (admin) update the estimated waiting time per participant in minutes. Example: \`/settime 10\`
 /getfront - (admin) get the username of the participant in front
 /removefront - (admin) confirmation dialog to remove participant in front
 /getall - (admin) get the usernames of all participants (slow)`;

@@ -18,14 +18,14 @@ module.exports.init = async function (msg) {
             num = parseInt(msg.text.split(" ")[1]);
             if(!Number.isInteger(num)) throw "not a valid number";
         } catch (e) {
-            const text = "Error, invalid input. This command is used to update the estimated time per participant in minutes." +
+            const text = "Error, invalid input. This command is used to update the estimated waiting time per participant in minutes." +
                 "\nExample format:\n" +
                 "/settime 5";
             messenger.send(msg.chat.id, text);
             return;
         }
         queries.setTimeEach(station, num);
-        const text = "Successfully updated the estimated time per person.";
+        const text = "Successfully updated the estimated waiting time per person.";
         messenger.send(msg.chat.id, text);
     }
 }
