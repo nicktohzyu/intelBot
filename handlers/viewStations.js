@@ -15,7 +15,7 @@ module.exports.init = async function(msg){
         return;
     }
     //get station names and description
-    const stations = await queries.getStations(); //[name, description]
+    const stations = await queries.getStationNames(); //array of station names
     //for each station get queue length
     const queueLengthPromises = stations.map(st => queries.getQueueLength(st));
     const timeEachPromises = stations.map(st => queries.getTimeEach(st));

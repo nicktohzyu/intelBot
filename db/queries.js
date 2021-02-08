@@ -67,7 +67,7 @@ module.exports.clearOldEntries = async function (schema_name, table_name) {
     await db.query(statement, args);
 }
 
-module.exports.getStations = async function () {
+module.exports.getStationNames = async function () {
     const statement = `
 		select name
 		from master.stations

@@ -17,7 +17,7 @@ module.exports.init = async function (msg) {
             messenger.send(msg.from.id, alreadyQueuedMsg + await queries.getWaitInfo(station, msg.from.id) + "\n\nYou may use /leavequeue to leave the current queue.");
             return;
         }
-        const stationNames = await queries.getStations();
+        const stationNames = await queries.getStationNames();
         const ik = new InlineKeyboard();
         for (let i = 0; i < stationNames.length; i++) {
             let data = {c: "join", s: stationNames[i]}
