@@ -15,14 +15,15 @@ module.exports.init = async function(msg){
         return;
     }
     //get station names and description
-    const stations = await queries.getStationNames(); //array of station names
+    const stationIDs = await queries.getStationIDs(); //array of station names
     //for each station get queue length
-    const queueLengthPromises = stations.map(st => queries.getQueueLength(st));
-    const timeEachPromises = stations.map(st => queries.getTimeEach(st));
+    const stationNamePromises = stationIDs.map(st => queries.getStationName(st));
+    const queueLengthPromises = stationIDs.map(st => queries.getQueueLength(st));
+    const timeEachPromises = stationIDs.map(st => queries.getTimeEach(st));
 
     let text = websiteText;
-    for (let i = 0; i < stations.length; i++) {
-        text += stations[i] + "\n"
+    for (let i = 0; i < stationIDs.length; i++) {
+        text += (await stationNamePromises[i]) + "\n"
         text += "Waiting time: " + ((await queueLengthPromises[i])*(await timeEachPromises[i])) + " minutes\n\n"
     }
     messenger.send(msg.from.id, text);

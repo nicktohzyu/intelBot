@@ -78,6 +78,21 @@ module.exports.getStationNames = async function () {
     return stationNames;
 }
 
+/**
+ * returns array of biginteger representing station IDs
+ * @returns {Promise<[bigint]>}
+ */
+module.exports.getStationIDs = async function () {
+    const statement = `
+		select "stationID"
+		from master.stations
+		order by "stationID"`;
+    const args = [];
+    const res = await db.query(statement, args);
+    const stationIDs = res.rows.map(r => r.stationID); //somehow can't return this directly?
+    return stationIDs;
+}
+
 // module.exports.getStationsDetails = async function () {
 //     const statement = `
 // 		select name, description
@@ -109,33 +124,43 @@ const getQueueNumber = async function (userId) {
     return (res.rowCount > 0) ? res.rows[0].queueNumber : null;
 }
 
-module.exports.getQueueLength = async function (stationName) {
+module.exports.getStationName = async function (stationID) {
     //gets the station a user is queueing for
-    const statement = `SELECT count(*) AS length FROM stations."` + stationName + `";`;
+    const statement = `
+            select name from master.stations
+            where "stationID" = $1`;
+    const args = [stationID];
+    const res = await db.query(statement, args);
+    return (res.rowCount > 0) ? res.rows[0].name.trim() : null;
+}
+
+module.exports.getQueueLength = async function (stationID) {
+    //gets the station a user is queueing for
+    const statement = `SELECT count(*) AS length FROM stations."` + stationID + `";`;
     const args = [];
     const res = await db.query(statement, args);
     return (res.rowCount > 0) ? parseInt(res.rows[0].length) : null;
 }
 
-const getQueueLengthAhead = async function (stationName, userID) {
+const getQueueLengthAhead = async function (stationID, userID) {
     //gets the station a user is queueing for
     const queueNumber = await getQueueNumber(userID);
     if(queueNumber === null){
         return null;
     }
     const statement =
-        `SELECT count(*) AS length FROM stations."` + stationName + `"
+        `SELECT count(*) AS length FROM stations."` + stationID + `"
          WHERE "queueNumber" < ($1);`;
     const args = [queueNumber];
     const res = await db.query(statement, args);
     return (res.rowCount > 0) ? res.rows[0].length : null;
 }
 
-module.exports.getTimeEach = async function (stationName) {
+module.exports.getTimeEach = async function (stationID) {
     const statement = `
             select "timeEach" from master.stations
-            where name = $1;`;
-    const args = [stationName];
+            where "stationID" = $1;`;
+    const args = [stationID];
     const res = await db.query(statement, args);
     return (res.rowCount > 0) ? res.rows[0].timeEach : null;
 }
