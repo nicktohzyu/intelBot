@@ -8,7 +8,7 @@ module.exports.init = async function (msg) {
         messenger.send(msg.chat.id, text);
         return;
     }
-    const station = await queries.getAdminStation(msg.chat.id);
+    const station = await queries.getAdminStationID(msg.chat.id);
     if (station === null) {
         const text = "This command can only be used in an authorized group chat.";
         messenger.send(msg.chat.id, text);

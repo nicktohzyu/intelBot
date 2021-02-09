@@ -10,7 +10,7 @@ module.exports.init = async function (msg) {
         return;
     }
     try {
-        const station = await queries.getAdminStation(msg.chat.id);
+        const station = await queries.getAdminStationID(msg.chat.id);
         if (station === null) {
             const errorText = "Error, unable to find station";
             messenger.send(msg.chat.id, errorText);
@@ -37,7 +37,7 @@ module.exports.callback = async function (query) {
     try {
         const data = JSON.parse(query.data);
         //check that the group is authorized to control a station
-        const station = await queries.getAdminStation(query.message.chat.id);
+        const station = await queries.getAdminStationID(query.message.chat.id);
         if (station === null) {
             messenger.edit(
                 query.message.chat.id,

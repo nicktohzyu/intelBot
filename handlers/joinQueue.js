@@ -12,16 +12,23 @@ module.exports.init = async function (msg) {
         return;
     }
     try {
-        const station = await queries.getStation(msg.from.id);
-        if (station !== null) {
-            messenger.send(msg.from.id, alreadyQueuedMsg + await queries.getWaitInfo(station, msg.from.id) + "\n\nYou may use /leavequeue to leave the current queue.");
+        const currStationID = await queries.getUserStationID(msg.from.id);
+        if (currStationID !== null) {
+            messenger.send(msg.from.id, alreadyQueuedMsg + await queries.getWaitInfo(currStationID, msg.from.id) + "\n\nYou may use /leavequeue to leave the current queue.");
             return;
         }
-        const stationNames = await queries.getStationNames();
+        if(currStationID === "0") {
+            console.Warn("Warning: in joinQueue, participant with ID " + msg.from.id + " has invalid stationID");
+        }
+
+        const stationIDs = await queries.getStationIDs();
+        //TODO: convert to method that returns all stations
+        const stationNamePromises = stationIDs.map(st => queries.getStationName(st));
+
         const ik = new InlineKeyboard();
-        for (let i = 0; i < stationNames.length; i++) {
-            let data = {c: "join", s: stationNames[i]}
-            ik.addRow({text: stationNames[i], callback_data: JSON.stringify(data)})
+        for (let i = 0; i < stationIDs.length; i++) {
+            let data = {c: "join", s: stationIDs[i]}
+            ik.addRow({text: await stationNamePromises[i], callback_data: JSON.stringify(data)})
         }
         ik.addRow({text: 'Cancel', callback_data: JSON.stringify({c: "cancel"})});
         //TODO: send list of stations and wait time
@@ -34,7 +41,7 @@ module.exports.init = async function (msg) {
 
 module.exports.callback = async function (query) {
     try {
-        const currStation = await queries.getStation(query.from.id);
+        const currStation = await queries.getUserStationID(query.from.id);
         if (currStation !== null) {
             messenger.edit(
                 query.message.chat.id,
@@ -45,30 +52,31 @@ module.exports.callback = async function (query) {
             return;
         }
         const data = JSON.parse(query.data);
-        const station = data.s;
-        const queueLength = await queries.getQueueLength(station);
-        const maxQueueLength = await queries.getMaxQueueLength(station);
+        const stationID = data.s;
+        const stationName = queries.getStationName(stationID)
+        const queueLength = await queries.getQueueLength(stationID);
+        const maxQueueLength = await queries.getMaxQueueLength(stationID);
         if (maxQueueLength !== null && queueLength >= maxQueueLength) {
             messenger.edit(
                 query.message.chat.id,
                 query.message.message_id,
                 null,
-                "Error: the queue for " + station + " is too full. Try again later, or queue for another station.",
+                "Error: the queue for " + stationName + " is too full. Try again later, or queue for another station.",
                 null);
         } else {
             try {
-                const initialQueueLength = await queries.getQueueLength(station);
-                await queries.enqueue(query.from.id, station);
+                const initialQueueLength = await queries.getQueueLength(stationID);
+                await queries.enqueue(query.from.id, stationID);
                 messenger.edit(
                     query.message.chat.id,
                     query.message.message_id,
                     null,
-                    "Successfully added to queue\n\n" + await queries.getWaitInfo(station, query.from.id),
+                    "Successfully added to queue\n\n" + await queries.getWaitInfo(stationID, query.from.id),
                     null);
                 if(initialQueueLength === 0){
-                    if(await queries.getQueueLength(station) > 0){
+                    if(await queries.getQueueLength(stationID) > 0){
                         //notify group that a participant has joined the empty queue
-                        const groupID = await queries.getGroupId(station);
+                        const groupID = await queries.getGroupId(stationID);
                         const text = "A participant has joined the empty queue.\n" + await queries.frontText(groupID);
                         messenger.send(groupID, text);
                     }

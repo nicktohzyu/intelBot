@@ -8,7 +8,7 @@ module.exports.init = async function (msg) {
         messenger.send(msg.chat.id, text);
         return;
     }
-    const station = await queries.getStation(msg.from.id);
+    const station = await queries.getUserStationID(msg.from.id);
     if (station === null) {
         const text = "You're not in a queue currently";
         messenger.send(msg.from.id, text);

@@ -12,12 +12,12 @@ module.exports.init = async function (msg) {
         return;
     }
     try {
-        const station = await queries.getStation(msg.from.id);
-        if (station === null) {
+        const stationID = await queries.getUserStationID(msg.from.id);
+        if (stationID === null) {
             messenger.send(msg.from.id, notQueuedMsg);
             return;
         }
-        const text = await queries.getWaitInfo(station, msg.from.id) + "\n\n Are you sure you want to stop queueing?"
+        const text = await queries.getWaitInfo(stationID, msg.from.id) + "\n\n Are you sure you want to stop queueing?"
         const ik = new InlineKeyboard();
 
         ik.addRow({text: 'Yes, leave the queue', callback_data: JSON.stringify({c: "leavequeue"})});
@@ -30,7 +30,7 @@ module.exports.init = async function (msg) {
 
 module.exports.callback = async function (query) {
     try {
-        const station = await queries.getStation(query.from.id);
+        const station = await queries.getUserStationID(query.from.id);
         if (station !== null) {
             const success = await queries.leaveQueue(query.from.id);
             if(success){
