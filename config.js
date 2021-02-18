@@ -40,9 +40,9 @@ module.exports.about = "This bot was built by @nicktohzyu for Tembusu College's 
 module.exports.start = "Bot started.";
 module.exports.websiteText = `View more info about the stations at:
 2d catalog:
-https://artspaces.kunstmatrix.com/en/exhibition/1766352/catalog
+https://artspaces.kunstmatrix.com/en/exhibition/4729407/catalog
 
 3d:
-https://artspaces.kunstmatrix.com/en/exhibition/1766352/expo2020\n\n`;
+https://artspaces.kunstmatrix.com/en/exhibition/4729407/intelligence-expo-2021\n\n`;
 
 module.exports.superusers = [653601805] //array of user id
