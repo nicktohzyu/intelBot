@@ -24,7 +24,8 @@ module.exports.init = async function(msg){
     let text = websiteText;
     for (let i = 0; i < stationIDs.length; i++) {
         text += (await stationNamePromises[i]) + "\n"
-        text += "Waiting time: " + ((await queueLengthPromises[i])*(await timeEachPromises[i])) + " minutes\n\n"
+        text += "Queue length: " + (await queueLengthPromises[i]) + "\n"
+        text += "Estimated waiting time: " + ((await queueLengthPromises[i])*(await timeEachPromises[i])) + " minutes\n\n"
     }
     messenger.send(msg.from.id, text);
 }
