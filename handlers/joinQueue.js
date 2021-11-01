@@ -53,7 +53,6 @@ module.exports.callback = async function (query) {
         }
         const data = JSON.parse(query.data);
         const stationID = data.s;
-        const stationName = queries.getStationName(stationID)
         const queueLength = await queries.getQueueLength(stationID);
         const maxQueueLength = await queries.getMaxQueueLength(stationID);
         if (maxQueueLength !== null && queueLength >= maxQueueLength) {
@@ -61,7 +60,7 @@ module.exports.callback = async function (query) {
                 query.message.chat.id,
                 query.message.message_id,
                 null,
-                "Error: the queue for " + stationName + " is too full. Try again later, or queue for another station.",
+                "Error: the queue for " + await queries.getStationName(stationID) + " is too full. Try again later, or queue for another station.",
                 null);
         } else {
             try {
