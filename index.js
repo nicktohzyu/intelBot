@@ -53,7 +53,7 @@ bot.on('message', (msg) => {
             messenger.send(msg.chat.id, about);
             break;
         case '/help':
-            messenger.send(msg.chat.id, help);
+            messenger.send(msg.chat.id, help, {parse_mode: 'Markdown'});
             break;
         case '/start':
             messenger.send(msg.chat.id, start + "\n" + about);
