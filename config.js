@@ -36,13 +36,9 @@ For stationmasters:
 /getfront - (admin) get the username of the participant in front
 /removefront - (admin) confirmation dialog to remove participant in front
 /getall - (admin) get the usernames of all participants (slow)`;
-module.exports.about = "This bot was built by @nicktohzyu for Tembusu College's Intelligence Expo";
+module.exports.about = "This bot was built by @nicktohzyu for Tembusu College's Intelligence Expo. It's been reanimated for Shan's halloween 2021. Spooky!" +
+    "\n\nhttps://github.com/nicktohzyu/intelBot";
 module.exports.start = "Bot started.";
-module.exports.websiteText = `View more info about the stations at:
-2d catalog:
-https://artspaces.kunstmatrix.com/en/exhibition/4729407/catalog
-
-3d:
-https://artspaces.kunstmatrix.com/en/exhibition/4729407/intelligence-expo-2021\n\n`;
+module.exports.websiteText = ``;
 
 module.exports.superusers = [653601805] //array of user id
