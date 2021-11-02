@@ -21,11 +21,11 @@ module.exports.init = async function(msg){
     const queueLengthPromises = stationIDs.map(st => queries.getQueueLength(st));
     const timeEachPromises = stationIDs.map(st => queries.getTimeEach(st));
 
-    let text = websiteText;
+    let text = "Sta_shans_:\n";
     for (let i = 0; i < stationIDs.length; i++) {
         text += (await stationNamePromises[i]) + "\n"
-        text += "Queue length: " + (await queueLengthPromises[i]) + "\n"
+        text += "The horde ahead has : " + (await queueLengthPromises[i]) + " zombies\n"
         text += "Estimated waiting time: " + ((await queueLengthPromises[i])*(await timeEachPromises[i])) + " minutes\n\n"
     }
-    messenger.send(msg.from.id, text);
+    messenger.send(msg.from.id, text, {parse_mode: 'Markdown'});
 }

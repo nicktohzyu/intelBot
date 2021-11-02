@@ -32,7 +32,7 @@ module.exports.init = async function (msg) {
         }
         ik.addRow({text: 'Cancel', callback_data: JSON.stringify({c: "cancel"})});
         //TODO: send list of stations and wait time
-        const text = 'Which station will you queue for? By queueing for a station, you agree to share your telegram handle with the test administrators, which they will use to contact you about the test';
+        const text = 'Which stashan will you queue for?';
         messenger.send(msg.from.id, text, ik.build());
     } catch (e) {
         console.log(e);
